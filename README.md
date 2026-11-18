@@ -3,7 +3,7 @@
 A small Windows desktop app that downloads videos as MP4. Paste a page URL, pick a folder, and DL-MP4 runs [yt-dlp](https://github.com/yt-dlp/yt-dlp) with [aria2c](https://aria2.github.io/) in the background. Progress and errors show up in an activity log inside the window.
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/app-window.png" alt="DL-MP4 main window with a fake download folder and a sample video URL" width="640">
+  <img src="docs/media/app-window.png" alt="DL-MP4 with the Downloads folder and a YouTube URL filled in" width="640">
 </p>
 
 ## Features
@@ -18,22 +18,22 @@ A small Windows desktop app that downloads videos as MP4. Paste a page URL, pick
 
 ## Screenshots
 
-The main window starts on the Downloads folder. The path below is an example only.
+The window opens on the last saved folder. On a fresh run that is your Downloads folder.
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/screenshots/empty-state.png" alt="Empty DL-MP4 window pointing at C:\Users\demo\Videos\Inbox" width="640">
+  <img src="docs/media/screenshots/empty-state.png" alt="Empty DL-MP4 window pointing at C:\Users\prodd\Downloads" width="640">
 </p>
 
-A finished single download, logged against a sample page and a sample output folder:
+A finished download of [Caminandes 1: Llama Drama](https://www.youtube.com/watch?v=JOhiWY7XmoY), a 90-second Creative Commons short:
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/screenshots/single-download.png" alt="Activity log after downloading https://videos.example.com/watch/demo-clip into D:\Media\Example\Inbox" width="640">
+  <img src="docs/media/screenshots/single-download.png" alt="Activity log after yt-dlp saved the video into C:\Users\prodd\Downloads and exited 0" width="640">
 </p>
 
-A batch run from a text file:
+A batch run from a text file in that same folder:
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/screenshots/batch-from-txt.png" alt="Activity log after reading URLs from C:\Users\demo\Lists\queue.txt into D:\Media\Example\Inbox" width="640">
+  <img src="docs/media/screenshots/batch-from-txt.png" alt="Activity log requesting the URL listed in C:\Users\prodd\Downloads\queue.txt" width="640">
 </p>
 
 ## Usage
@@ -48,22 +48,22 @@ DL-MP4 does not ship yt-dlp or aria2c. Both need to be on `PATH` before you pres
 ### Single URL
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/gifs/single-url.gif" alt="Typing a sample URL and downloading into D:\Media\Example\Inbox" width="640">
+  <img src="docs/media/gifs/single-url.gif" alt="Pasting a YouTube URL and downloading it into C:\Users\prodd\Downloads" width="640">
 </p>
 
-Example values used in the clip:
+Values used in the clip:
 
 | Field | Value |
 | --- | --- |
-| Folder | `D:\Media\Example\Inbox` |
-| URL | `https://videos.example.com/watch/demo-clip` |
+| Folder | `C:\Users\prodd\Downloads` |
+| URL | `https://www.youtube.com/watch?v=JOhiWY7XmoY` |
 
-The file is written into that folder as MP4. The log prints yt-dlp progress, then a line such as `yt-dlp exited with exit code: 0`.
+The clip is 1 minute 30 seconds. yt-dlp writes the MP4 into Downloads, and the log ends with `yt-dlp exited with exit code: 0`.
 
 ### Browse for a folder
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/gifs/browse-folder.gif" alt="Picking C:\Users\demo\Videos\Inbox from the folder dialog" width="640">
+  <img src="docs/media/gifs/browse-folder.gif" alt="Choosing C:\Users\prodd\Downloads from the folder dialog" width="640">
 </p>
 
 The dialog title is **Select a folder**. A usable choice is saved and restored the next time the app starts. If the saved folder is gone, DL-MP4 switches back to Downloads and says so in the log.
@@ -71,27 +71,25 @@ The dialog title is **Select a folder**. A usable choice is saved and restored t
 ### Batch from a text file
 
 <p align="center">
-  <img src="https://cdn.example.com/dl-mp4/media/gifs/batch-txt.gif" alt="Pointing the URL field at C:\Users\demo\Lists\queue.txt and downloading every line" width="640">
+  <img src="docs/media/gifs/batch-txt.gif" alt="Pointing the URL field at C:\Users\prodd\Downloads\queue.txt and downloading the listed URL" width="640">
 </p>
 
 Put the path of a `.txt` file in the URL field. Blank lines are skipped. Each remaining line is one URL, and matching quotes around a line are removed.
 
-`C:\Users\demo\Lists\queue.txt`:
+`C:\Users\prodd\Downloads\queue.txt`:
 
 ```text
-https://videos.example.com/watch/demo-clip
-https://videos.example.com/watch/second-clip
-'https://clips.example.org/v/sample-reel'
+https://www.youtube.com/watch?v=JOhiWY7XmoY
 ```
 
-With the folder set to `D:\Media\Example\Inbox`, the log reports that three URLs were sent to yt-dlp.
+The log reports that the URL was read from that file and sent to yt-dlp. With the file already in Downloads, yt-dlp reports that it has already been downloaded and exits 0.
 
 ### What the download command does
 
 DL-MP4 starts `yt-dlp` with no console window and feeds the URL list on stdin:
 
 ```text
-yt-dlp --newline --downloader aria2c --extractor-args generic:impersonate -P "D:\Media\Example\Inbox" -t mp4 -a -
+yt-dlp --newline --downloader aria2c --extractor-args generic:impersonate -P "C:\Users\prodd\Downloads" -t mp4 -a -
 ```
 
 `-t mp4` asks yt-dlp for an MP4. `-P` is the folder from the window. aria2c is the downloader. If `yt-dlp` is not on `PATH`, the log shows `Failed to start yt-dlp`.
@@ -123,7 +121,7 @@ The last good folder is stored as plain text:
 Example contents:
 
 ```text
-D:\Media\Example\Inbox
+C:\Users\prodd\Downloads
 ```
 
 The file is rewritten when a download starts and when you pick a folder. A path that is not an existing directory is rejected, and the app returns to Downloads.
@@ -136,6 +134,8 @@ dl-mp4/
 │   └── app_icon.ico
 ├── build.rs
 ├── Cargo.toml
+├── docs/
+│   └── media/
 └── src/
     ├── lib.rs      # folder config, URL lists, yt-dlp process
     └── main.rs     # iced window
