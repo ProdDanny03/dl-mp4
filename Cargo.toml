@@ -3,6 +3,7 @@ name = "dl-mp4"
 version = "0.2.0"
 edition = "2024"
 description = "Download mp4 from most websites"
+readme = "README.md"
 
 [dependencies]
 chrono = "0.4.45"
