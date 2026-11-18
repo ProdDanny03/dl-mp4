@@ -1,20 +1,18 @@
 #![windows_subsystem = "windows"]
 
-use std::collections::VecDeque;
-use std::{fs, io, thread};
-
 use chrono::Local;
+use dl_mp4::{
+    downloads_dir, folder_config_file, folder_is_usable, run_ytdlp, save_folder_path,
+    strip_wrapping_quotes, urls_from_input,
+};
 use iced::futures::{SinkExt, StreamExt};
 use iced::{
     Alignment, Background, Border, Color, Element, Font, Length, Task, Theme, font,
     widget::{Column, button, column, container, row, scrollable, text, text_input},
 };
 use rfd::FileDialog;
-
-use dl_mp4::{
-    downloads_dir, folder_config_file, folder_is_usable, run_ytdlp, save_folder_path,
-    strip_wrapping_quotes, urls_from_input,
-};
+use std::collections::VecDeque;
+use std::{fs, io, thread};
 
 #[derive(Debug, Clone)]
 enum Message {
