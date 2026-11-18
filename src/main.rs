@@ -178,7 +178,7 @@ fn view(state: &AppState) -> Column<'_, Message> {
         .width(Length::Fill)
         .padding(10);
 
-    let url_input = text_input("Enter URL...", &state.url)
+    let url_input = text_input("Enter URL or .txt file path...", &state.url)
         .on_input(Message::UrlChanged)
         .width(Length::Fill)
         .padding(10);
